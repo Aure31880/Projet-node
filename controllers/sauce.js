@@ -31,7 +31,7 @@ exports.getOneSauce = (req, res, next) => {
 exports.liked = (req, res, next) => { };
 
 exports.updateSauce = (req, res, next) => {
-    const sauceProduct = res.file ? {
+    const sauceProduct = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
