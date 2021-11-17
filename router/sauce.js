@@ -8,7 +8,7 @@ router.get('/', auth, SauceController.getSauces);
 router.get('/:id', auth, SauceController.getOneSauce);
 router.post('/', auth, multer, SauceController.createSauce);
 router.post('/:id/like', auth, SauceController.liked);
-router.put('/:id', auth, SauceController.updateSauce);
+router.put('/:id', auth, multer, SauceController.updateSauce);
 router.delete('/:id', auth, SauceController.deleteSauce);
 
 module.exports = router;

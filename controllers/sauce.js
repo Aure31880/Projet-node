@@ -23,17 +23,26 @@ exports.getSauces = (req, res, next) => {
 };
 
 exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({ id: req.params.id })
+    Sauce.findOne({ _id: req.params.id })
         .then(sauce => res.status(200).json(sauce))
         .catch(error => res.status(400).json({ error }));
 };
 
 exports.liked = (req, res, next) => { };
-exports.updateSauce = (req, res, next) => { };
+
+exports.updateSauce = (req, res, next) => {
+    const sauceProduct = res.file ? {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceProduct, _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Votre produit à bien été modifié !' }))
+        .catch(error => res.status(400).json({ error }));
+};
 
 exports.deleteSauce = (req, res, next) => {
     Sauce.deleteOne({ _id: req.params.id })
-        .then(sauce => res.status(200).json({ message: 'Votre produit à bien été supprimé !' }))
+        .then(() => res.status(200).json({ message: 'Votre produit à bien été supprimé !' }))
         .catch(error => res.status(400).json({ error }));
 };
 
