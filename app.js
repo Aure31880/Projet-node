@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const UserRouter = require('./router/user');
-const SaucesRouter = require('./router/user');
+const SaucesRouter = require('./router/sauce');
+const path = require('path');
 
 const app = express();
 mongoose.connect('mongodb+srv://Aurelien:Trivium31880@cluster0.4sngw.mongodb.net/piiquante?retryWrites=true&w=majority',
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/auth', UserRouter);
 app.use('/api/sauces', SaucesRouter);
