@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const UserRouter = require('./router/user');
+const SaucesRouter = require('./router/user');
 
 const app = express();
 mongoose.connect('mongodb+srv://Aurelien:Trivium31880@cluster0.4sngw.mongodb.net/piiquante?retryWrites=true&w=majority',
@@ -17,11 +18,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
-
 app.use(express.json());
-app.use('/frontend', express.static('/frontend'));
 
 app.use('/api/auth', UserRouter);
-
+app.use('/api/sauces', SaucesRouter);
 
 module.exports = app;
