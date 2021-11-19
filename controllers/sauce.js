@@ -53,7 +53,7 @@ exports.liked = async (req, res, next) => {
 
         case 0:
             Sauce.findOne({ _id: itemId })
-                .then((sauce) => {
+                .then(sauce => {
                     if (sauce.usersLiked.includes(userId)) {
                         Sauce.updateOne({
                             $pull: { usersLiked: userId },
@@ -85,7 +85,6 @@ exports.liked = async (req, res, next) => {
                 .catch(error => res.status(400).json({ error }));
 
             break;
-
     }
 }
 
