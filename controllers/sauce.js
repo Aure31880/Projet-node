@@ -1,7 +1,7 @@
 const express = require('express');
 const Sauce = require('../models/Sauces');
 const fs = require('fs');
-
+const { query } = require('express');
 
 exports.createSauce = (req, res, next) => {
     const item = JSON.parse(req.body.sauce);
@@ -28,7 +28,54 @@ exports.getOneSauce = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-exports.liked = (req, res, next) => { };
+exports.liked = async (req, res, next) => {
+    const userId = req.body.userId;
+    const itemId = req.params.id;
+    if (!req.body) {
+        return res.status(400).json({ message: 'Erreur like service !' });
+    }
+
+    Sauce.findOne({ id: itemId })
+        .then(sauce => {
+            let opinionArr = {
+                usersLiked: sauce.usersLiked,
+                usersDisliked: sauce.usersDisliked,
+                likes: 0,
+                dislikes: 0
+            }
+            const liked = req.body.like;
+            switch (liked) {
+                case 1:
+                    opinionArr.usersLiked.push(userId)
+                    break;
+
+                case 0:
+                    if (opinionArr.usersLiked.includes(userId)) {
+                        const userToDeleted = opinionArr.usersLiked.indexOf(userId)
+                        console.log(userToDeleted);
+                        opinionArr.usersLiked.splice(index, 1)
+                    }
+                    if (opinionArr.usersDisliked.includes(userId)) {
+                        const userToDeleted = opinionArr.usersDisliked.indexOf(userId)
+                        console.log(userToDeleted);
+                        opinionArr.usersDisliked.splice(index, 1)
+                    }
+
+                    break;
+
+                case -1:
+                    opinionArr.usersDisliked.push(userId)
+
+                    break;
+
+            };
+            opinionArr.likes = opinionArr.usersLiked.length;
+            opinionArr.dislikes = opinionArr.usersDisliked.length;
+
+            sauce.updateOne({ id: itemId }, opinionArr)
+                .then(() => res.status(200).json({ message: 'Votre avis à été enregistré !' }))
+        })
+}
 
 exports.updateSauce = (req, res, next) => {
     const sauceProduct = req.file ? {
