@@ -37,8 +37,8 @@ exports.liked = async (req, res, next) => {
 
     let liked = req.body.like;
     let arrLikes = {
-        likes: 0,
-        dislikes: 0
+        likes: null,
+        dislikes: null
     }
     switch (liked) {
         case 1:
