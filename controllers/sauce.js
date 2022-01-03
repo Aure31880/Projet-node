@@ -79,8 +79,18 @@ exports.updateSauce = (req, res, next) => {
 };
 
 exports.deleteSauce = (req, res, next) => {
-    Sauce.deleteOne({ _id: req.params.id })
-        .then(() => res.status(201).json({ message: 'Votre produit à bien été supprimé !' }))
-        .catch(error => res.status(400).json(error));
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            if (!sauce) {
+                return res.status(404).json(new Error('Sauce introuvable !'))
+            }
+            if (sauce.userId != req.auth.userId) {
+                return res.status(401).json(new Error('Requête non autorisé !'))
+            }
+            Sauce.deleteOne({ _id: req.params.id })
+                .then(() => res.status(201).json({ message: 'Votre produit à bien été supprimé !' }))
+                .catch(error => res.status(400).json(error));
+        })
+
 };
 
