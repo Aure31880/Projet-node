@@ -31,10 +31,12 @@ const SauceSchema = mongoose.Schema(
             require: true
         },
         likes: {
-            type: Number
+            type: Number,
+            default: 0
         },
         dislikes: {
-            type: Number
+            type: Number,
+            default: 0
         },
         usersLiked: {
             type: Array,
