@@ -1,4 +1,6 @@
 const multer = require('multer');
+const fs = require('fs')
+const dir = './images'
 
 const MIME_TYPES = {
     'image/jpg': 'jpg',
@@ -6,8 +8,12 @@ const MIME_TYPES = {
     'image/png': 'png'
 };
 
+
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir)
+        }
         callback(null, 'images');
     },
     filename: (req, file, callback) => {
@@ -16,5 +22,6 @@ const storage = multer.diskStorage({
         callback(null, name + Date.now() + '.' + extension);
     }
 });
+
 
 module.exports = multer({ storage: storage }).single('image');
